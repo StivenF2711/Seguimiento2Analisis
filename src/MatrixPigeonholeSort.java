@@ -69,12 +69,8 @@ public class MatrixPigeonholeSort {
             columnIndexToSortBy++;
         }
 
-
         System.out.println("\nMatriz ordenada por la columna " + columnIndexToSortBy + ":");
         printMatrix(matrix);
-
-
-
 
         long endTime = System.nanoTime();
         long elapsedTime = endTime - startTime;

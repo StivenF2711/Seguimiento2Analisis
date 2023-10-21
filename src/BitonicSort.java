@@ -1,23 +1,38 @@
 public class BitonicSort {
-    public static void bitonicSort(int[] arr) {
-        int n = arr.length-1;
-        for (int size = 2; size <= n; size = size * 2) {
-            for (int stride = size / 2; stride > 0; stride = stride / 2) {
-                for (int i = 0; i < n; i++) {
-                    boolean ascending = (i / size) % 2 == 0;
-                    boolean shouldSwap = (ascending && (i % size < stride)) || (!ascending && (i % size >= stride));
-                    if (shouldSwap) {
-                        swap(arr, i, i + stride);
-                    }
-                }
-            }
+    public static void bitonicSort(int[] arr, int low, int count, boolean up) {
+        if (count > 1) {
+            int k = count / 2;
+            bitonicSort(arr, low, k, true);
+            bitonicSort(arr, low + k, k, false);
+            bitonicMerge(arr, low, count, up);
         }
     }
 
-    public static void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+    public static void bitonicMerge(int[] arr, int low, int count, boolean up) {
+        if (count > 1) {
+            int k = greatestPowerOfTwoLessThan(count);
+            for (int i = low; i < low + count - k; i++) {
+                compareAndSwap(arr, i, i + k, up);
+            }
+            bitonicMerge(arr, low, k, up);
+            bitonicMerge(arr, low + k, count - k, up);
+        }
+    }
+
+    public static void compareAndSwap(int[] arr, int i, int j, boolean up) {
+        if ((arr[i] > arr[j] && up) || (arr[i] < arr[j] && !up)) {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    public static int greatestPowerOfTwoLessThan(int n) {
+        int k = 1;
+        while (k > 0 && k < n) {
+            k = k << 1;
+        }
+        return k >> 1;
     }
 
     public static void printArray(int[] arr) {
@@ -28,14 +43,27 @@ public class BitonicSort {
     }
 
     public static void main(String[] args) {
-        int[] arr = {68, 42, 27, 3, 15, 62, 74, 99, 5};
+        long startTime = System.nanoTime();
+        int rows = 1000;
+        int columns = 1000;
+        int[][] matrix = new int[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = (int) (Math.random() * 100);
+            }
+        }
+        int[] arr;
 
         System.out.println("Arreglo original:");
-        printArray(arr);
 
-        bitonicSort(arr);
-
-        System.out.println("\nArreglo ordenado:");
-        printArray(arr);
+        for (int i = 0; i < matrix.length; i++) {
+            arr = matrix[i];
+            bitonicSort(arr, 0, arr.length, true);
+            printArray(arr);
+        }
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 }
