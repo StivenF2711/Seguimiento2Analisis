@@ -1,35 +1,50 @@
 public class MatrixSelectionSort {
 
     public static void main(String[] args) {
-        int[][] matrix = {
-                {64, 34, 25, 12},
-                {22, 11, 90, 5},
-                {78, 45, 9, 60}
-        };
+        long startTime = System.nanoTime();
+        int rows = 1000;
+        int columns = 1000;
+        int[][] matrix = new int[rows][columns];
 
-        int columnIndexToSortBy = 0; // Índice de la columna a ordenar (0 para la primera columna)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = (int) (Math.random() * 10000);
+            }
+        }
 
         System.out.println("Matriz original:");
         printMatrix(matrix);
 
-        selectionSortMatrix(matrix, columnIndexToSortBy);
+        selectionSort(matrix);
 
-        System.out.println("\nMatriz ordenada por la columna " + columnIndexToSortBy + ":");
+        System.out.println("Matriz ordenada:");
         printMatrix(matrix);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 
-    public static void selectionSortMatrix(int[][] matrix, int columnIndex) {
-        for (int i = 0; i < matrix.length - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < matrix.length; j++) {
-                if (matrix[j][columnIndex] < matrix[minIndex][columnIndex]) {
-                    minIndex = j;
+    public static void selectionSort(int[][] matrix) {
+        int rows = matrix.length;
+        if (rows == 0) {
+            return; // Matriz vacía, no se puede ordenar
+        }
+
+        int cols = matrix[0].length;
+        for (int col = 0; col < cols; col++) {
+            for (int i = 0; i < rows - 1; i++) {
+                int minIndex = i;
+                for (int j = i + 1; j < rows; j++) {
+                    if (matrix[j][col] < matrix[minIndex][col]) {
+                        minIndex = j;
+                    }
                 }
+                // Intercambiar elementos en la matriz
+                int temp = matrix[i][col];
+                matrix[i][col] = matrix[minIndex][col];
+                matrix[minIndex][col] = temp;
             }
-            // Intercambiar la fila actual con la fila con el elemento mínimo
-            int[] temp = matrix[i];
-            matrix[i] = matrix[minIndex];
-            matrix[minIndex] = temp;
         }
     }
 
@@ -42,3 +57,5 @@ public class MatrixSelectionSort {
         }
     }
 }
+
+

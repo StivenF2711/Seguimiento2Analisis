@@ -46,8 +46,8 @@ public class MatrixPigeonholeSort {
     }
 
     public static void main(String[] args) {
-        int rows = 2000;
-        int columns = 2000;
+        int rows = 1000;
+        int columns = 1000;
         int[][] matrix = new int[rows][columns];
         long startTime = System.nanoTime();
 
@@ -55,7 +55,7 @@ public class MatrixPigeonholeSort {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 // Puedes llenar la matriz con los valores que desees
-                matrix[i][j] = (int) (Math.random() * 1000);
+                matrix[i][j] = (int) (Math.random() * 10000);
             }
         }
 
@@ -72,15 +72,12 @@ public class MatrixPigeonholeSort {
 
         System.out.println("\nMatriz ordenada por la columna " + columnIndexToSortBy + ":");
         printMatrix(matrix);
-       // También puedes usar System.currentTimeMillis() en lugar de System.nanoTime()
 
-        // Aquí puedes colocar el código que deseas medir
 
-        long endTime = System.nanoTime(); // También puedes usar System.currentTimeMillis() en lugar de System.nanoTime()
 
-        // Calcular el tiempo transcurrido en milisegundos
+
+        long endTime = System.nanoTime();
         long elapsedTime = endTime - startTime;
-
         System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 }

@@ -1,37 +1,27 @@
 public class MatrixCombsort {
 
     public static void main(String[] args) {
-        int[][] matrix = {
-                {64, 34, 25, 12},
-                {22, 11, 90, 5},
-                {78, 45, 9, 60}
-        };
+        long startTime = System.nanoTime();
+        int rows = 1000;
+        int columns = 1000;
+        int[][] matrix = new int[rows][columns];
 
-        System.out.println("Matriz original:");
-        printMatrix(matrix);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = (int) (Math.random() * 10000);
+            }
+        }
 
-        // Ordenar filas
-        sortMatrixRows(matrix);
-        System.out.println("\nMatriz ordenada por filas:");
-        printMatrix(matrix);
+        //System.out.println("Matriz original:");
+        //printMatrix(matrix);
 
-        // Restaurar la matriz original
-        matrix = new int[][]{
-                {64, 34, 25, 12},
-                {22, 11, 90, 5},
-                {78, 45, 9, 60}
-        };
-
-        // Ordenar columnas
         sortMatrixColumns(matrix);
         System.out.println("\nMatriz ordenada por columnas:");
         printMatrix(matrix);
-    }
 
-    public static void sortMatrixRows(int[][] matrix) {
-        for (int[] row : matrix) {
-            combsort(row);
-        }
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 
     public static void sortMatrixColumns(int[][] matrix) {
