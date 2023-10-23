@@ -5,12 +5,40 @@ public class TimSortForMatrices {
 
     private static final int MIN_MERGE = 32;
 
-    public static void timSort(int[][] matrix, Comparator<int[]> comparator) {
-        int n = matrix.length;
+    public static void timSort(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        // Convertir la matriz en un arreglo unidimensional
+        int[] flatArray = new int[rows * cols];
+        int flatIndex = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                flatArray[flatIndex] = matrix[row][col];
+                flatIndex++;
+            }
+        }
+
+        // Aplicar TimSort al arreglo unidimensional
+        timSort(flatArray);
+
+        // Convertir el arreglo ordenado de nuevo en una matriz
+        flatIndex = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                matrix[row][col] = flatArray[flatIndex];
+                flatIndex++;
+            }
+        }
+    }
+
+    public static void timSort(int[] arr) {
+        int n = arr.length;
+
         for (int i = 0; i < n; i += MIN_MERGE) {
             int left = i;
             int right = Math.min(i + MIN_MERGE - 1, n - 1);
-            insertionSort(matrix, left, right, comparator);
+            insertionSort(arr, left, right);
         }
 
         for (int size = MIN_MERGE; size < n; size *= 2) {
@@ -19,76 +47,79 @@ public class TimSortForMatrices {
                 int right = Math.min(left + 2 * size - 1, n - 1);
 
                 if (mid < right) {
-                    merge(matrix, left, mid, right, comparator);
+                    merge(arr, left, mid, right);
                 }
             }
         }
     }
 
-    public static void insertionSort(int[][] matrix, int left, int right, Comparator<int[]> comparator) {
+    public static void insertionSort(int[] arr, int left, int right) {
         for (int i = left + 1; i <= right; i++) {
-            int[] current = matrix[i];
+            int current = arr[i];
             int j = i - 1;
-            while (j >= left && comparator.compare(matrix[j], current) > 0) {
-                matrix[j + 1] = matrix[j];
+            while (j >= left && arr[j] > current) {
+                arr[j + 1] = arr[j];
                 j--;
             }
-            matrix[j + 1] = current;
+            arr[j + 1] = current;
         }
     }
 
-    public static void merge(int[][] matrix, int left, int mid, int right, Comparator<int[]> comparator) {
+    public static void merge(int[] arr, int left, int mid, int right) {
         int leftSize = mid - left + 1;
         int rightSize = right - mid;
 
-        int[][] leftArr = new int[leftSize][];
-        int[][] rightArr = new int[rightSize][];
+        int[] leftArr = new int[leftSize];
+        int[] rightArr = new int[rightSize];
 
-        System.arraycopy(matrix, left, leftArr, 0, leftSize);
-        System.arraycopy(matrix, mid + 1, rightArr, 0, rightSize);
+        System.arraycopy(arr, left, leftArr, 0, leftSize);
+        System.arraycopy(arr, mid + 1, rightArr, 0, rightSize);
 
         int i = 0, j = 0, k = left;
         while (i < leftSize && j < rightSize) {
-            if (comparator.compare(leftArr[i], rightArr[j]) <= 0) {
-                matrix[k++] = leftArr[i++];
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k++] = leftArr[i++];
             } else {
-                matrix[k++] = rightArr[j++];
+                arr[k++] = rightArr[j++];
             }
         }
 
         while (i < leftSize) {
-            matrix[k++] = leftArr[i++];
+            arr[k++] = leftArr[i++];
         }
 
         while (j < rightSize) {
-            matrix[k++] = rightArr[j++];
+            arr[k++] = rightArr[j++];
         }
     }
 
     public static void main(String[] args) {
-        int[][] matrix = {
-                {170, 45, 75},
-                {90, 802, 24},
-                {2, 66, 8},
-                {123, 456, 789}
-        };
+        long startTime = System.nanoTime();
+        int rows = 1000;
+        int columns = 1000;
+        int[][] matrix = new int[rows][columns];
 
-        Comparator<int[]> comparator = (a, b) -> {
-            for (int i = 0; i < a.length; i++) {
-                int cmp = Integer.compare(a[i], b[i]);
-                if (cmp != 0) {
-                    return cmp;
-                }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = (int) (Math.random() * 100);
             }
-            return 0;
-        };
+        }
 
-        timSort(matrix, comparator);
+        System.out.println("Matriz original:");
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+        timSort(matrix);
 
         // Imprime la matriz ordenada
         for (int[] row : matrix) {
             System.out.println(Arrays.toString(row));
         }
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
 }
-

@@ -60,8 +60,8 @@ public class TreeSort {
 
     public static void main(String[] args) {
         long startTime = System.nanoTime();
-        int rows = 1000;
-        int columns = 1000;
+        int rows = 500;
+        int columns = 500;
         int[][] matrix = new int[rows][columns];
 
         for (int i = 0; i < rows; i++) {
@@ -87,6 +87,7 @@ public class TreeSort {
 
         long endTime = System.nanoTime();
         long elapsedTime = endTime - startTime;
+        System.out.println("nice");
         System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000000) + " milisegundos");
     }
     public static void printMatrix(int[][] matrix) {

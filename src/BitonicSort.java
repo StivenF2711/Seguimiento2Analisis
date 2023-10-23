@@ -56,6 +56,12 @@ public class BitonicSort {
         int[] arr;
 
         System.out.println("Arreglo original:");
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
 
         for (int i = 0; i < matrix.length; i++) {
             arr = matrix[i];
